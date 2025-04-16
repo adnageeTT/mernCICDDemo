@@ -2,7 +2,7 @@ import express from 'express';
 import { connect } from 'mongoose';
 import cors from 'cors';
 import 'dotenv/config';
-import  User from './user.model.js';
+import  User from './models/User.js';
 
 const app = express();
 app.use(cors());
