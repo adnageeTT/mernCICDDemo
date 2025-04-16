@@ -12,7 +12,7 @@ app.use(express.json());
 const connectDB = async () => {
     try {
         await connect(process.env.MONGO_URI);
-        console.log('MongoDB Connected');
+        console.log('MongoDB Connected successfully');
     } catch (err) {
         console.error('MongoDB Connection Error:', err.message);
     }
