@@ -5,7 +5,13 @@ import 'dotenv/config';
 import  User from './models/User.js';
 
 const app = express();
-app.use(cors());
+
+const allowedOrigins = ['https://goldfish-app-sq78m.ondigitalocean.app'];
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 
