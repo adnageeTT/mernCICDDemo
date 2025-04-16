@@ -7,8 +7,8 @@ function RegisterForm() {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    firstName: '',
-    lastName: ''
+    firstname: '',
+    lastname: ''
   });
 
   const handleChange = e => {

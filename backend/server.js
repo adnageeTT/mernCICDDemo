@@ -24,6 +24,7 @@ connectDB();
 app.post('/register', async(req, res) => {
     try{
         const { username, password, firstname, lastname } = req.body;
+        
         const newUser = new User({username, password, firstname, lastname});
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully!' });
