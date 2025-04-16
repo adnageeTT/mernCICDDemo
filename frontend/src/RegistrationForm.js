@@ -27,8 +27,8 @@ function RegisterForm() {
     <form onSubmit={handleSubmit}>
       <input name="username" placeholder="Username" onChange={handleChange} required />
       <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
-      <input name="firstName" placeholder="First Name" onChange={handleChange} required />
-      <input name="lastName" placeholder="Last Name" onChange={handleChange} required />
+      <input name="firstname" placeholder="First Name" onChange={handleChange} required />
+      <input name="lastname" placeholder="Last Name" onChange={handleChange} required />
       <button type="submit">Register</button>
     </form>
   );

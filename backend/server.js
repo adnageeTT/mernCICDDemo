@@ -1,5 +1,5 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import { connect } from 'mongoose';
 import cors from 'cors';
 import 'dotenv/config';
 import  User from './user.model.js';
@@ -9,13 +9,15 @@ app.use(cors());
 app.use(express.json());
 
 
-mongoose.connect(process.env.MONGO_URI, {
-    suseNewUrlParser: true,
-    useUnifiedTopology: true,
-    }).then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
-
-
+const connectDB = async () => {
+    try {
+        await connect(process.env.MONGO_URI);
+        console.log('MongoDB Connected');
+    } catch (err) {
+        console.error('MongoDB Connection Error:', err.message);
+    }
+};
+connectDB();
 
 
 
