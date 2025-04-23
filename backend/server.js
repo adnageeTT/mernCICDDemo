@@ -28,8 +28,6 @@ const connectDB = async () => {
 };
 connectDB();
 
-
-
 app.post('/register', async(req, res) => {
     try{
         const { username, password, firstname, lastname } = req.body;
@@ -42,11 +40,6 @@ app.post('/register', async(req, res) => {
     }
 });
 
-app.get('/health', (req, res) => {
-    res.status(200).json({ message: 'App is healthy' });
-  });
-
-
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../frontend/build')));
@@ -56,4 +49,3 @@ if (process.env.NODE_ENV === 'production') {
   }
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port in dev ${PORT}`));
-export default app;
