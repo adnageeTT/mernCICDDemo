@@ -1,9 +1,10 @@
 name: Test MERN App on PR
 
 on:
-  pull_request:
-    branches:
-      - main
+    pull_request:
+      types: [opened, synchronize, reopened]
+      branches:
+        - main
 
 jobs:
   run-tests:
