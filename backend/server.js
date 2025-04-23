@@ -1,21 +1,17 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
 import { connect } from 'mongoose';
 import cors from 'cors';
 import 'dotenv/config';
 import  User from './models/User.js';
 
-dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-const allowedOrigins = ['https://goldfish-app-sq78m.ondigitalocean.app'];
 app.use(cors({
-  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -46,13 +42,18 @@ app.post('/register', async(req, res) => {
     }
 });
 
+app.get('/health', (req, res) => {
+    res.status(200).json({ message: 'App is healthy' });
+  });
+
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../frontend/build')));
-    app.get('*', (req, res) => {
+    app.get(/(.*)/, (req, res) => {
       res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'));
     });
   }
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port in dev ${PORT}`));
+export default app;
