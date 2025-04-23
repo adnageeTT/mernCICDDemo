@@ -1,4 +1,4 @@
-name: Test and Deploy to Heroku
+name: Deploy MERN App to Heroku
 
 on:
   push:
@@ -6,32 +6,14 @@ on:
       - main
 
 jobs:
-  test-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install backend dependencies & run tests
-        working-directory: backend
-        run: |
-          npm install
-          npm test
-
-      - name: Install frontend dependencies & run tests
-        working-directory: frontend
-        run: |
-          npm install
-          npm test -- --watchAll=false
-
       - name: Deploy to Heroku
-        if: success()  # only if tests pass
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}

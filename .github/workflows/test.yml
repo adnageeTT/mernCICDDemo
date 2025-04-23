@@ -1,0 +1,32 @@
+name: Test MERN App on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install backend deps & run tests
+        working-directory: backend
+        run: |
+          npm install
+          npm test
+
+      - name: Install frontend deps & run tests
+        working-directory: frontend
+        run: |
+          npm install
+          npm test -- --watchAll=false
