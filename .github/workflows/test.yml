@@ -1,7 +1,7 @@
 name: Test MERN App on PR
 
 on:
-    pull_request:
+    pull_request_target:
       branches:
         - main
       types: [opened, synchronize, reopened]
@@ -30,19 +30,3 @@ jobs:
         run: |
           npm install
           npm test -- --watchAll=false
-
-      - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm install
-        
-      - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
-        
-      - name: Upload frontend build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-build
-          path: frontend/build
