@@ -37,6 +37,11 @@ jobs:
       - name: Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Set Git Identity
+        run: |
+          git config --global user.email "ci-bot@example.com"
+          git config --global user.name "GitHub Actions CI"
       
       - name: Login to Heroku
         run: |
@@ -47,6 +52,7 @@ jobs:
         working-directory: ./backend
         run: |
           heroku git:remote --app mern-cicd-demo-app
+          git config --global init.defaultBranch main
           git init
           git add .
           git commit -m "Deploy from CI"
