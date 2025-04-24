@@ -13,15 +13,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          npm install --prefix backend
-          npm install --prefix frontend
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Build frontend
+
+      - name: Install dependencies
+        run: npm install 
+
+      - name: Install Heroku CLI
         run: |
-          npm run build --prefix frontend
-          
+          curl https://cli-assets.heroku.com/install.sh | sh
+          heroku --version
+
+      - name: Download frontend build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/build
+      
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -29,5 +40,4 @@ jobs:
           heroku_app_name: "mern-cicd-demo-app"
           heroku_email: "adnagee@gmail.com"
           branch: main
-        env: 
-          HD_SKIP_APP_CREATION: true
+          usedocker: false;
