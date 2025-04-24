@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders a username input field', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const usernameElement = screen.getByPlaceholderText(/username/i);
+  expect(usernameElement).toBeInTheDocument();
 });
