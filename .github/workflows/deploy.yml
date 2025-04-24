@@ -8,36 +8,37 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
 
 
-      - name: Install dependencies
-        run: npm install 
-
-      - name: Install Heroku CLI
+      - name: Install Backend Dependencies
+        working-directory: ./backend
         run: |
-          curl https://cli-assets.heroku.com/install.sh | sh
-          heroku --version
+          npm install 
 
-      - name: Download frontend build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-build
-          path: frontend/build
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: |
+          npm install
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build
       
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "mern-cicd-demo-app"
-          heroku_email: "adnagee@gmail.com"
-          branch: main
-          usedocker: false;
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          procfile: "backend/Procfile"
