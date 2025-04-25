@@ -44,6 +44,13 @@ jobs:
     
       - name: Merge PR if tests pass
         run: |
-          gh pr merge $PR_NUMBER --merge --delete-branch
+          gh pr merge $PR_NUMBER --merge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Force push main to trigger deploy workflow
+        run: |
+          git fetch origin main
+          git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
