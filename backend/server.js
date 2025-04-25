@@ -1,4 +1,3 @@
-import fs from 'fs';//***************** */
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -9,10 +8,6 @@ import  User from './models/User.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-console.log('Files in current dir:', fs.readdirSync(__dirname));//***************** */
-console.log('Models folder:', fs.readdirSync(path.join(__dirname, 'models')));//***************** */
-
 const app = express();
 
 app.use(cors({
