@@ -46,6 +46,7 @@ jobs:
         run: |
           gh pr merge $PR_NUMBER --merge
         env:
+          PR_NUMBER: ${{ env.PR_NUMBER }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Force push main to trigger deploy workflow
