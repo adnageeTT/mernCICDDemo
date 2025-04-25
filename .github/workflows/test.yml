@@ -1,10 +1,10 @@
 name: Test MERN App on PR
 
 on:
-    pull_request_target:
-      branches:
-        - main
-      types: [opened, synchronize, reopened]
+  workflow_run:
+    workflows: ["Auto PR: Dev to Main"]
+    types:
+      - completed
 
 jobs:
   run-tests:
@@ -30,3 +30,20 @@ jobs:
         run: |
           npm install
           npm test -- --watchAll=false
+
+      - name: Authenticate with GitHub CLI
+        run: echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+        
+      - name: Get PR number
+        id: get_pr
+        run: |
+         PR_NUMBER=$(gh pr list --state open --head dev --base main --json number -q '.[0].number')
+         echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+      - name: Merge PR if tests pass
+        run: |
+          gh pr merge $PR_NUMBER --merge --delete-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
