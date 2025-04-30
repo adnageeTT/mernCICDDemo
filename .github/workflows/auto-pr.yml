@@ -1,0 +1,24 @@
+name: "Auto PR: Dev to Main"
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create Pull Request to Main
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: "dev"
+          destination_branch: "main"
+          pr_title: "Automated PR: Merge dev into main"
+          pr_body: |
+            This is an automated PR created by the CI workflow.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
