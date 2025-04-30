@@ -1,0 +1,97 @@
+name: Full MERN CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install backend deps & run tests
+        working-directory: backend
+        run: |
+          npm install
+          npm test
+
+      - name: Install frontend deps & run tests
+        working-directory: frontend
+        run: |
+          npm install
+          npm test -- --watchAll=false
+
+  merge:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Git
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "ci-bot"
+
+      - name: Merge dev into main
+        run: |
+          git fetch origin main
+          git checkout main
+          git merge origin/dev --no-edit
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: merge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Build Frontend
+        run: |
+            cd frontend
+            npm run build
+
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: "mern-cicd-demo-app"
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "ci-bot"
+          heroku git:remote -a $HEROKU_APP_NAME
+          git add .
+          git commit -m "Deploy commit from CI" || echo "No changes to commit"
+          git push --force https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:main
