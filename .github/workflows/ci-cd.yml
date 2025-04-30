@@ -47,9 +47,17 @@ jobs:
       - name: Merge dev into main
         run: |
           git fetch origin main
-          git checkout main
-          git merge origin/dev --no-edit
+          git checkout -b main origin/main
+          git merge dev --allow-unrelated-histories -m "Auto merge dev into main"
           git push origin main
+        
+
+    #   - name: Merge dev into main
+    #     run: |
+    #       git fetch origin main
+    #       git checkout main
+    #       git merge origin/dev --no-edit
+    #       git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
