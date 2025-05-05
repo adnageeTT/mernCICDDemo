@@ -40,13 +40,13 @@ app.post('/register', async(req, res) => {
 });
 
 // Serve frontend in production
-if (process.env.NODE_ENV === 'production') {
-    const frontendPath = path.resolve(__dirname, '..', 'frontend', 'build');
-    console.log('Frontend build path:', frontendPath);
-    app.use(express.static(frontendPath));
-    app.get(/(.*)/, (req, res) => {
-        res.sendFile(path.join(frontendPath, 'index.html'));
-    });
+// if (process.env.NODE_ENV === 'production') {
+//     const frontendPath = path.resolve(__dirname, '..', 'frontend', 'build');
+//     console.log('Frontend build path:', frontendPath);
+//     app.use(express.static(frontendPath));
+//     app.get(/(.*)/, (req, res) => {
+//         res.sendFile(path.join(frontendPath, 'index.html'));
+//     });
 
 
 
@@ -54,6 +54,6 @@ if (process.env.NODE_ENV === 'production') {
     // app.get(/(.*)/, (req, res) => {
     //   res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'));
     // });
-  }
+//   }
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
