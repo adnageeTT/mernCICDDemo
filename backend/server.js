@@ -1,6 +1,4 @@
 import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { connect } from 'mongoose';
 import cors from 'cors';
 import 'dotenv/config';
@@ -8,19 +6,17 @@ import  User from './models/User.js';
 
 const allowedOrigins = [process.env.CLIENT_URL];
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// setup middleware
 const app = express();
-
+app.use(express.json());
 app.use(cors({
   origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
-app.use(express.json());
 
-
+// connect to the database
 const connectDB = async () => {
     try {
         await connect(process.env.MONGO_URI);
@@ -31,6 +27,7 @@ const connectDB = async () => {
 };
 connectDB();
 
+// A sample endpoint
 app.post('/register', async(req, res) => {
     try{
         const { username, password, firstname, lastname } = req.body;
@@ -43,21 +40,6 @@ app.post('/register', async(req, res) => {
     }
 });
 
-// Serve frontend in production
-// if (process.env.NODE_ENV === 'production') {
-//     const frontendPath = path.resolve(__dirname, '..', 'frontend', 'build');
-//     console.log('Frontend build path:', frontendPath);
-//     app.use(express.static(frontendPath));
-//     app.get(/(.*)/, (req, res) => {
-//         res.sendFile(path.join(frontendPath, 'index.html'));
-//     });
-
-
-
-    // app.use(express.static(path.join(__dirname, '../frontend/build')));
-    // app.get(/(.*)/, (req, res) => {
-    //   res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'));
-    // });
-//   }
+// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
